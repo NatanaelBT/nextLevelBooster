@@ -1,0 +1,55 @@
+// desafio colocar atualizar e remover ...
+// seeds inicia a aplicação com dados padroes 
+import express, { response } from 'express';
+
+const app = express();
+
+app.use(express.json());
+
+// POST , GET , PUT , DELETE
+
+//post http://localhost:3333/users/ = criar um usuario 
+//get http://localhost:3333/users/ = listar usuarios
+//get http://localhost:3333/users/5 = buscar dados do usuario com id 5
+
+// request param: parametros que vem na propria rota que identificam um recurso
+// query param: parametros opcionais 
+// request body: parametros para criação e atualização de informaçoes 
+
+const users = [
+    'diego',
+    'joao',
+    'natanael',
+    'natanael'
+];
+
+app.get('/users',(request, response) => {// primeiro parametro: escolhe uma rota (/users) segundo : arrow function Recebe 2 paramentros tambem. O primeiro é o request(recebe dados da aplicação) e o segundo o response(devolve dados)
+    const search = String(request.query.search);//.toLowerCase() manda o paramentro para lower casa. tenho que melhorar depois 
+
+    const filteredUsers = search ? users.filter( user => user.includes(search)) : users;
+
+
+    return response.json(filteredUsers);
+});
+
+app.get('/users/:id',(request, response) => {//busca o usuario pelo id
+   const id = Number(request.params.id);
+
+   const user = users[id];
+
+   return response.json(user)
+});
+
+app.post('/users', (request, response) => {
+    const data = request.body;
+    console.log(data);
+
+    const user = {
+        name: data.name,//.toUpperCase()
+        email: data.email//.toLowerCase()
+    };
+
+    return response.json(user)
+});
+
+app.listen(3333);//escolhe a porta 
